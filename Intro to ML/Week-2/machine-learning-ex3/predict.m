@@ -25,9 +25,8 @@ a1 = [ones(size(X,1),1) X];
 a2 = [ones(m,1) sigmoid(a1 * Theta1')];
 h = sigmoid(a2 * Theta2');
 
-for i = 1:m
-  [M, p(i)] = max(h(i,:), [], 2);
-end
+[M, p] = max(h, [], 2);
+
 
 
 
