@@ -44,7 +44,7 @@ J = 1/m * (-y' * log(h) - (1-y)' * log(1-h)) + ((lambda / (2*m)) * sum(theta(2:e
 grad(1) = 1/m * (X(:,1)'*(h-y));
 
 for iter = 2:size(grad,1)
-     grad(iter) = (1/m * (X(:,iter)')*(h-y)) + (lambda/m) * theta(iter);
+    grad(iter) = (1/m * (X(:,iter)')*(h-y)) + (lambda/m) * theta(iter);
 end
 
 

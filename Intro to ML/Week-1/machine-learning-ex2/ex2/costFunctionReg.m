@@ -19,7 +19,8 @@ grad = zeros(size(theta));
 
 
 h = sigmoid(X*theta);
-J = 1/m * (-y' * log(h) - (1-y)' * log(1-h)) + ((lambda / (2*m)) * sum(theta(2:end).^2));
+new_theta = theta([2:size(theta,1)],1);
+J = 1/m * (-y' * log(h) - (1-y)' * log(1-h)) + ((lambda / (2*m)) * (new_theta'*new_theta));
 
 
 grad(1) = 1/m * (X(:,1)'*(h-y));
