@@ -22,7 +22,7 @@ from sklearn.decomposition import PCA
 
 
 #Read train and test datasets
-path = "/Users/pemayangdon/DataScience_2019501129/Introduction to Machine Learning/Code Camp/Exercise1/house-prices-advanced-regression-techniques/";
+path = "/Users/pemayangdon/DataScience_2019501129/Introduction to Machine Learning/CodeCamp/Exercise1/house-prices-advanced-regression-techniques/";
 
 
 trainx_df = pd.read_csv(path+"train.csv", index_col='Id');
@@ -102,6 +102,19 @@ testx_df_filled.reset_index(drop=True, inplace=True)
 
 # print(trainx_df_filled.isnull().sum())
 # print(testx_df_filled.isnull().sum())
+scaler = preprocessing.StandardScaler().fit(trainx_df_filled)
+
+trainx_df_filled = scaler.transform(trainx_df_filled)
+testx_df_filled = scaler.transform(testx_df_filled)
+
+X_train, X_test, y_train, y_test = train_test_split(trainx_df_filled, trainy_df.values.ravel(), test_size=0.3, random_state=42)
+
+
+
+
+
+
+
 
 
 

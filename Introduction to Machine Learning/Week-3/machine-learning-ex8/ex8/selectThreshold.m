@@ -25,15 +25,14 @@ for epsilon = min(pval):stepsize:max(pval)
 
 
 
-
-
-
-
-
-
-
-
-
+    predict = (pval < epsilon);
+    
+    falsePositive = sum((predict == 1) & (yval == 0));
+    falseNegative = sum((predict == 0) & (yval == 1));
+    totalPositive = sum((predict == 1) & (yval == 1));
+    Precision = totalPositive / (totalPositive + falsePositive);
+    recall = totalPositive / (totalPositive + falseNegative);
+    F1 = 2 * Precision * recall / (Precision + recall);
 
     % =============================================================
 
