@@ -154,10 +154,6 @@ def compute_gain(df):
     # .last(period)
     gain = (df_sorted['Close'].iloc[-1] / df_sorted['Close'].iloc[0])  - 1
     return gain
-    df_sorted = df.sort_values(by="Date",ascending=True).set_index("Date")
-    # .last(period)
-    gain = (df_sorted['Close'].iloc[-1] / df_sorted['Close'].iloc[0])  - 1
-    return gain
 
 
 def dailyGain():
