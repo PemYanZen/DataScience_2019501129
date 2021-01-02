@@ -157,22 +157,57 @@ def compute_gain(df, period):
     return gain
 
 
-gainers = []
-df_gainers = DataFrame()
+def dailyGain(period):
+    gainers = []
 
-def getGainDf():
-    for filename in glob.glob('data/*.csv'):
+    for filename in glob.glob('/Users/pemayangdon/Desktop/finalExam/Daily/*.csv'):
+        data_df = pd.read_csv(filename)
+        
+        data_df['Date']= pd.to_datetime(data_df['Date'])
+        gainers.append([filename[filename.rfind('/')+1:filename.find('.')],round(compute_gain(data_df, period), 2)*100])
+        
+    daily_gainers = pd.DataFrame(gainers,columns=['Companies','Gain'])
+    
+    
+    daily_gainers.sort_values(['Gain'], ascending=[False], ignore_index=True, inplace=True)
+    return daily_gainers
+    
+
+def weeklyGain(period):
+    gainers = []
+
+    for filename in glob.glob('/Users/pemayangdon/Desktop/finalExam/Weekly/*.csv'):
         data_df = pd.read_csv(filename)
         data_df['Date']= pd.to_datetime(data_df['Date'])
-        gainers.append([filename[filename.find('/')+1:filename.find('.')],round(compute_gain(data_df, "1M"), 2)*100])
+        gainers.append([filename[filename.rfind('/')+1:filename.find('.')],round(compute_gain(data_df, period), 2)*100])
     
-    df_gainers = pd.DataFrame(gainers,columns=['Companies','Gain'])
+    weekly_gainers = pd.DataFrame(gainers,columns=['Companies','Gain'])
     
-    df_gainers.sort_values(['Gain'], ascending=[False], ignore_index=True, inplace=True)
-    # .iloc[0:10,:]
+    weekly_gainers.sort_values(['Gain'], ascending=[False], ignore_index=True, inplace=True)
+    return weekly_gainers
+
+def monthlyGain(period):
+    gainers = []
+
+    for filename in glob.glob('/Users/pemayangdon/Desktop/finalExam/Monthly/*.csv'):
+        data_df = pd.read_csv(filename)
+        data_df['Date']= pd.to_datetime(data_df['Date'])
+        gainers.append([filename[filename.rfind('/')+1:filename.find('.')],round(compute_gain(data_df, period), 2)*100])
     
-    # print(df_gainers.head(3))
-# getGainDf()
+    monthly_gainers = pd.DataFrame(gainers,columns=['Companies','Gain'])
+    
+    monthly_gainers.sort_values(['Gain'], ascending=[False], ignore_index=True, inplace=True)
+    return monthly_gainers
+
+daily_gainers  = dailyGain("1M")
+# print(daily_gainers)
+
+
+weekly_gainers = weeklyGain("1M")
+# print(weekly_gainers)
+
+monthly_gainers = monthlyGain("1M")
+# print(monthly_gainers)
 
 
 # #QUESTION 3
