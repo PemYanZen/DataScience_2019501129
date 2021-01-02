@@ -54,11 +54,15 @@ def getSP500():
 
     df_sp500.to_csv("sp500.csv")
 
-getSP500()
+# getSP500()
 
 
-def getHistoricalData(ticker):
-    driver = webdriver.Chrome(PATH)
+def getHistoricalDataWeekly(ticker):
+    
+    chromeOptions = Options()
+    chromeOptions.add_experimental_option("prefs", {"download.default_directory": "/Users/pemayangdon/Desktop/finalExam/Weekly"})
+    
+    driver = webdriver.Chrome(executable_path = PATH, options = chromeOptions)
     
     url = "https://finance.yahoo.com/quote/"+ticker+"/history?period1=1519842600&period2=1544639400&interval=1d&filter=history&frequency=1d"
     driver.get(url)
@@ -68,41 +72,80 @@ def getHistoricalData(ticker):
     
     element = driver.find_element_by_xpath('//*[@id="Col1-1-HistoricalDataTable-Proxy"]/section/div[1]/div[1]/div[3]/span/div/span/span')
     driver.execute_script("arguments[0].innerText = 'Weekly'", element)
-    time.sleep(5)
+    time.sleep(10)
     
     WebDriverWait(driver, 40).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#Col1-1-HistoricalDataTable-Proxy > section > div.Pt\(15px\) > div.C\(\$tertiaryColor\).Mt\(20px\).Mb\(15px\) > span.Fl\(end\).Pos\(r\).T\(-6px\) > a > span'))).click()
     time.sleep(10)
     
+    driver.quit()
+
     
-    element = driver.find_element_by_xpath('//*[@id="Col1-1-HistoricalDataTable-Proxy"]/section/div[1]/div[1]/div[3]/span/div/span/span')
-    driver.execute_script("arguments[0].innerText = 'Daily'", element)
+# getHistoricalData("NEE")
+
+def getHistoricalDataMonthly(ticker):    
+    chromeOptions = Options()
+    chromeOptions.add_experimental_option("prefs", {"download.default_directory": "/Users/pemayangdon/Desktop/finalExam/Monthly"})
+    
+    driver = webdriver.Chrome(executable_path = PATH, options = chromeOptions)
+    
+
+    url = "https://finance.yahoo.com/quote/"+ticker+"/history?period1=1519842600&period2=1544639400&interval=1d&filter=history&frequency=1d"
+    driver.get(url)
+    
     time.sleep(5)
-    
-    WebDriverWait(driver, 40).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#Col1-1-HistoricalDataTable-Proxy > section > div.Pt\(15px\) > div.C\(\$tertiaryColor\).Mt\(20px\).Mb\(15px\) > span.Fl\(end\).Pos\(r\).T\(-6px\) > a > span'))).click()
-    time.sleep(10)
+       
     
     element = driver.find_element_by_xpath('//*[@id="Col1-1-HistoricalDataTable-Proxy"]/section/div[1]/div[1]/div[3]/span/div/span/span')
     driver.execute_script("arguments[0].innerText = 'Monthly'", element)
     time.sleep(5)
     
     WebDriverWait(driver, 40).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#Col1-1-HistoricalDataTable-Proxy > section > div.Pt\(15px\) > div.C\(\$tertiaryColor\).Mt\(20px\).Mb\(15px\) > span.Fl\(end\).Pos\(r\).T\(-6px\) > a > span'))).click()
-    time.sleep(10)
+    time.sleep(20)
     
     driver.quit()
     
-# getHistoricalData("NEE")
+    
+    
+def getHistoricalDataDaily(ticker):
+    
+    chromeOptions = Options()
+    chromeOptions.add_experimental_option("prefs", {"download.default_directory": "/Users/pemayangdon/Desktop/finalExam/Daily"})
+    
+    driver = webdriver.Chrome(executable_path = PATH, options = chromeOptions)
+    
+
+    url = "https://finance.yahoo.com/quote/"+ticker+"/history?period1=1519842600&period2=1544639400&interval=1d&filter=history&frequency=1d"
+    driver.get(url)
+    
+    time.sleep(5)
+       
+     
+    element = driver.find_element_by_xpath('//*[@id="Col1-1-HistoricalDataTable-Proxy"]/section/div[1]/div[1]/div[3]/span/div/span/span')
+    driver.execute_script("arguments[0].innerText = 'Daily'", element)
+    time.sleep(5)
+    
+    WebDriverWait(driver, 40).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#Col1-1-HistoricalDataTable-Proxy > section > div.Pt\(15px\) > div.C\(\$tertiaryColor\).Mt\(20px\).Mb\(15px\) > span.Fl\(end\).Pos\(r\).T\(-6px\) > a > span'))).click()
+    time.sleep(20)
+
+    driver.quit()
+
+
 
 
 df_sp500ticker = pd.read_csv("sp500.csv")
+df_sp5 = df_sp500ticker['Companies']
+
 def parallelDownload():
-    
     df_sp5 = df_sp500ticker['Companies']
-    
     num_cores = multiprocessing.cpu_count()
+    Parallel(n_jobs=num_cores)(delayed(getHistoricalDataWeekly)(ticker=i) for i in df_sp5[:6])
+        
+
+#for i in df_sp5[:6]:
+    #getHistoricalDataWeekly(i)
+    #getHistoricalDataDaily(i)
+    #getHistoricalDataMonthly(i)
     
-    Parallel(n_jobs=num_cores)(delayed(getHistoricalData)(ticker=i) for i in df_sp5[:3])
-    
-# parallelDownload()   
 
 
 #QUESTION 2
