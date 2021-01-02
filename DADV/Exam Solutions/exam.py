@@ -60,7 +60,7 @@ getSP500()
 def getHistoricalData(ticker):
     driver = webdriver.Chrome(PATH)
     
-    url = "https://finance.yahoo.com/quote/"+ticker+"/history?p="+ticker   
+    url = "https://finance.yahoo.com/quote/"+ticker+"/history?period1=1519842600&period2=1544639400&interval=1d&filter=history&frequency=1d"
     driver.get(url)
     
     time.sleep(5)
