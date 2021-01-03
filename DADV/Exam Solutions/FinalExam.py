@@ -206,13 +206,14 @@ def monthlyGain():
     return gainers
 
 daily_gainers  = dailyGain()
+# print(daily_gainers)
 
 weekly_gainers = weeklyGain()
 # print(weekly_gainers)
 
 monthly_gainers = monthlyGain()
 # print(monthly_gainers)
-
+# 
  
 
 
@@ -243,9 +244,16 @@ def corrMatrix():
 
 
 # QUESTION 4
-def plot():
+def plot(term):
+    daily_gains = DataFrame()
     
-    daily_gains = pd.DataFrame.from_dict(daily_gainers, orient='index')
+    if term == 'd':
+        daily_gains = pd.DataFrame.from_dict(daily_gainers, orient='index')
+        
+    elif term == 'm':
+        daily_gains = pd.DataFrame.from_dict(monthly_gainers, orient='index')
+    else:
+        daily_gains = pd.DataFrame.from_dict(weekly_gainers, orient='index')
 
     daily_tickers = daily_gains.index
 
@@ -258,13 +266,10 @@ def plot():
     bottom_ = daily_avg.tail(5) #bottom 5
     bottom_idx = bottom_.index
     
-    # print(top_idx)
     sectors = df_sp500ticker['sector']
     sectors.drop_duplicates(inplace=True)
     
-    # print(df_sp500ticker.head(3))
     
-   
     df3 = DataFrame()
     sec_list = []
     
@@ -301,7 +306,6 @@ def plot():
         
     # print(dict1_bottom)
     
-    
     data = []
     for sc in sec_list:
         tmp = []
@@ -317,11 +321,14 @@ def plot():
         data.append(tmp)
     df5 = pd.DataFrame(data,columns=['sectors','top5', 'bottom5'])
     idx = df5['sectors']
+    df5.set_index('sectors', inplace=True)    
+    ax = df5.plot.bar(rot=30)
     
-    df = pd.DataFrame({'top5': df5['top5'],'bottom5': df5['bottom5']}, index = idx)
-    # ax = df5.plot.bar(rot=0)
-    
-# plot()
-    
+print("weekly")
+plot('w')
+# print("monthly")
+# plot('m')
+# print("daily")
+# plot('d')
     
     
